@@ -21,7 +21,7 @@
 
         <div class="section">
           <h1>Registration</h1>
-          <form>
+          <form action="/register" method="POST">
             {% csrf_token %}
             <div>
               <label for="first_name">First Name</label>
@@ -32,10 +32,6 @@
               <input type="text" name="last_name" />
             </div>
             <div>
-              <label for="birthday">Date of Birth</label>
-              <input type="date" name="birthday" />
-            </div>
-            <div>
               <label for="email">Email</label>
               <input type="text" name="email" />
             </div>
@@ -44,8 +40,8 @@
               <input type="password" name="password" />
             </div>
             <div>
-              <label for="conf_password">Confirm Password</label>
-              <input type="password" name="conf_password" />
+              <label for="confirm_pw">Confirm Password</label>
+              <input type="password" name="confirm_pw" />
             </div>
             <button>Register</button>
           </form>
@@ -54,7 +50,7 @@
 
       <div class="section">
         <h1>Login</h1>
-        <form action="">
+        <form action="/login" method="POST">
           {% csrf_token %}
           <div>
             <label for="email">Email</label>
