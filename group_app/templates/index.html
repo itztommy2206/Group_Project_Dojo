@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Register</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <div class="errors">
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+
+        <div class="section">
+          <h1>Registration</h1>
+          <form>
+            {% csrf_token %}
+            <div>
+              <label for="first_name">First Name</label>
+              <input type="text" name="first_name" />
+            </div>
+            <div>
+              <label for="last_name">Last Name</label>
+              <input type="text" name="last_name" />
+            </div>
+            <div>
+              <label for="birthday">Date of Birth</label>
+              <input type="date" name="birthday" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="text" name="email" />
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="password" name="password" />
+            </div>
+            <div>
+              <label for="conf_password">Confirm Password</label>
+              <input type="password" name="conf_password" />
+            </div>
+            <button>Register</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="section">
+        <h1>Login</h1>
+        <form action="">
+          {% csrf_token %}
+          <div>
+            <label for="email">Email</label>
+            <input type="text" name="email" />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" />
+          </div>
+          <button>Login</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
