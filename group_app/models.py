@@ -52,3 +52,13 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     objects = UserManager()
+
+class City(models.Model):
+    city = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    
+
+    class Meta:
+        verbose_name_plural = "cities"
