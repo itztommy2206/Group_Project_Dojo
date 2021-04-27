@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from PIL import Image
 import re
 import bcrypt
 
@@ -60,5 +62,3 @@ class City(models.Model):
 
     
 
-    class Meta:
-        verbose_name_plural = "cities"

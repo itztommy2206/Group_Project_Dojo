@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import * 
 from django.contrib import messages
 import bcrypt
-import requests
+# import requests
 from .forms import CityForm
 
 ## Register & Login

@@ -3,19 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" >
     <title>Weather App</title>
   </head>
   <body>
-    <div>
+    <div class="jumbotron text-center" style="margin-bottom:0">
       <h1>The Weather App</h1>
       <h2>Welcome {{current_user.first_name}} {{current_user.last_name}}</h2>
-      <a href="/logout">Log Out</a>
-
-      <section class="hero is-primary">
+      <a class="nav-link" href="/logout">Log Out</a>
+    </div>
+      <section class="hero is-success">
         <div class="hero-body">
-            <div class="container">
+            <div class="container text-center">
                 <h1 class="title">
                     What's the weather like?
                 </h1>
@@ -33,9 +34,7 @@
                                 {{form.city}}
                             </div>
                             <div class="control">
-                                <button type="submit" class="button is-info">
-                                    Add City
-                                </button>
+                                  <button class="btn btn-outline-primary btn-md">Add City</button>
                             </div>
                         </div>
                     </form>
@@ -72,7 +71,7 @@
             </div>
         </div>
       </section>
-      <footer class="footer">
+      <footer class="footer hero is-success">
       </footer>
     </div>
   </body>
