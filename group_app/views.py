@@ -54,14 +54,20 @@ def weather(request):
         
         print(form)
         if form.is_valid():
-            
+            print(request.POST['city'])
             new_city = form.cleaned_data['city']
-            existing_city_count = City.objects.filter(city = new_city).count()
+            existing_city_count = City.objects.filter(city = new_city, users = User.objects.get(id = request.session['user_id'])).count()
+           
             if existing_city_count == 0:
                 r = requests.get(url.format(new_city)).json()
-                print(r)
+                
                 if r['cod'] == 200:
+                    
                     form.save()
+                    city_saved = City.objects.last()
+                    connect_city_update_user = User.objects.get(id=request.session['user_id'])
+                    connect_city_update_user.cities.add(city_saved)
+                    connect_city_update_user.save()
                 else:
                     err_msg = "City does not exist"
             else:
@@ -74,7 +80,7 @@ def weather(request):
             message = "City added successfully"
             message_class = "is-success"
     form = CityForm()
-    cities = City.objects.all().order_by("city")
+    cities = City.objects.filter(users = request.session['user_id']).order_by("city")
    
     weather_data =[]
     for city in cities:
@@ -89,9 +95,10 @@ def weather(request):
         }
         weather_data.append(city_weather)
     
-    
+    city_belong_user = City.objects.filter(users = User.objects.get(id= request.session['user_id']))
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
+        "current_user_city": city_belong_user,
         'all_users': User.objects.all(),
         'city_weather':weather_data,
         "form":form,
@@ -104,7 +111,9 @@ def weather(request):
     return render(request, "weather_app.html", context)
 
 def delete_city(request, city_name):
-    City.objects.get(city = city_name).delete()
+    if 'user_id' not in request.session:
+        return redirect('/')
+    City.objects.get(city = city_name, users = request.session['user_id']).delete()
     return redirect("weather")
 
 

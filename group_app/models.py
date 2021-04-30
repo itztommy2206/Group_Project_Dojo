@@ -57,6 +57,7 @@ class User(models.Model):
 
 class City(models.Model):
     city = models.CharField(max_length=100)
+    users = models.ManyToManyField(User, related_name = "cities")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
