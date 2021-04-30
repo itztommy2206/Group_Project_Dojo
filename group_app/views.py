@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import * 
 from django.contrib import messages
 import bcrypt
-# import requests
+import requests
 from .forms import CityForm
 
 ## Register & Login
@@ -45,14 +45,42 @@ def weather(request):
         return redirect('/')
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=9daf36046d4eaa5f629f1a54d0892481'
+    err_msg = ""
+    message = ""
+    message_class =""
+
     if request.method =="POST":
         form = CityForm(request.POST)
-        form.save()
+        
+        print(form)
+        if form.is_valid():
+            
+            new_city = form.cleaned_data['city']
+            existing_city_count = City.objects.filter(city = new_city).count()
+            if existing_city_count == 0:
+                r = requests.get(url.format(new_city)).json()
+                print(r)
+                if r['cod'] == 200:
+                    form.save()
+                else:
+                    err_msg = "City does not exist"
+            else:
+                err_msg = 'city already exists!'
+        
+        if err_msg:
+            message = err_msg
+            message_class = "is-danger"
+        else:
+            message = "City added successfully"
+            message_class = "is-success"
     form = CityForm()
-    cities = City.objects.all()
+    cities = City.objects.all().order_by("city")
+   
     weather_data =[]
     for city in cities:
+
         r = requests.get(url.format(city.city)).json()
+
         city_weather = {
             "city": city.city,
             "temperature": r['main']['temp'],
@@ -66,11 +94,19 @@ def weather(request):
         'current_user': User.objects.get(id=request.session['user_id']),
         'all_users': User.objects.all(),
         'city_weather':weather_data,
-        "form":form
+        "form":form,
+        "message":message,
+        "message_class":message_class
+
     }
 
     
     return render(request, "weather_app.html", context)
+
+def delete_city(request, city_name):
+    City.objects.get(city = city_name).delete()
+    return redirect("weather")
+
 
 def logout(request):
     request.session.flush()
