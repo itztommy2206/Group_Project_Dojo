@@ -52,6 +52,7 @@ class User(models.Model):
     password = models.TextField()
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    #cities
 
     objects = UserManager()
 
@@ -60,6 +61,12 @@ class City(models.Model):
     users = models.ManyToManyField(User, related_name = "cities")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    #zipcodes 
 
+class Zip(models.Model):
+    zipcode = models.CharField(max_length = 5)
+    # city = models.ForeignKey(City, related_name = "zipcodes", on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
     
 

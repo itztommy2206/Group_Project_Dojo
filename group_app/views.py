@@ -3,7 +3,7 @@ from .models import *
 from django.contrib import messages
 import bcrypt
 import requests
-from .forms import CityForm
+from .forms import CityForm, ZipForm
 
 ## Register & Login
 def index(request):
@@ -45,24 +45,23 @@ def weather(request):
         return redirect('/')
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=9daf36046d4eaa5f629f1a54d0892481'
+    
     err_msg = ""
     message = ""
     message_class =""
-
+    # zipForm = ZipForm()
+    
     if request.method =="POST":
-        form = CityForm(request.POST)
+        form = CityForm(request.POST or None)
+        # zipForm = ZipForm(request.POST)
         
-        print(form)
         if form.is_valid():
-            print(request.POST['city'])
             new_city = form.cleaned_data['city']
             existing_city_count = City.objects.filter(city = new_city, users = User.objects.get(id = request.session['user_id'])).count()
-           
+            
             if existing_city_count == 0:
                 r = requests.get(url.format(new_city)).json()
-                
                 if r['cod'] == 200:
-                    
                     form.save()
                     city_saved = City.objects.last()
                     connect_city_update_user = User.objects.get(id=request.session['user_id'])
@@ -72,7 +71,22 @@ def weather(request):
                     err_msg = "City does not exist"
             else:
                 err_msg = 'city already exists!'
-        
+
+
+            
+            # new_zip = zipForm.cleaned_data['zipcode']
+            # existing_zip_count = Zip.bojects.filter(zipcode = new_zip).count()
+            # if existing_zip_count == 0:
+            #     t = requests.get(url2.format(new_zip)).json()
+            #     if t['cod'] == 200:
+            #         for city in cities:
+            #             if city.city != t['name']:
+            #                 zipForm.save()
+            #             else:
+            #                 err_msg ="City already exist"
+            # else:
+            #     err_msg ="City already exists"
+
         if err_msg:
             message = err_msg
             message_class = "is-danger"
@@ -80,15 +94,18 @@ def weather(request):
             message = "City added successfully"
             message_class = "is-success"
     form = CityForm()
+    
     cities = City.objects.filter(users = request.session['user_id']).order_by("city")
-   
+    
+    
+    
     weather_data =[]
     for city in cities:
 
         r = requests.get(url.format(city.city)).json()
 
         city_weather = {
-            "city": city.city,
+            "city": r['name'],
             "temperature": r['main']['temp'],
             "description":r["weather"][0]["description"],
             "icon":r["weather"][0]['icon']
@@ -102,6 +119,7 @@ def weather(request):
         'all_users': User.objects.all(),
         'city_weather':weather_data,
         "form":form,
+        # "zipForm":zipForm,
         "message":message,
         "message_class":message_class
 
@@ -120,3 +138,47 @@ def delete_city(request, city_name):
 def logout(request):
     request.session.flush()
     return redirect('/')
+
+def zipcode(request):
+    if 'user_id' not in request.session:
+        return redirect('/')
+    url2 = "http://api.openweathermap.org/data/2.5/weather?zip={}&units=imperial&appid=9daf36046d4eaa5f629f1a54d0892481" 
+    zips = Zip.objects.all()
+    zipcode_data = []
+    for zipcode in zips:
+        t = requests.get(url2.format(zipcode.zipcode)).json()
+        zip_weather = {
+            "city":t['name'],
+            "temperature":t['main']['temp'],
+            "description":t["weather"][0]["description"],
+            "icon":t['weather'][0]['icon']
+        }
+        zipcode_data.append(zip_weather)
+    error_messages = ""
+    zipcodeForm = ZipForm()
+    if request.method == "POST":
+        zipcodeForm = ZipForm(request.POST or None)
+        if zipcodeForm.is_valid():
+            new_zip = zipcodeForm.cleaned_data['zipcode'] 
+            existing_zip_count = Zip.objects.filter(zipcode = new_zip).count()
+            if existing_zip_count == 0:
+                t = requests.get(url2.format(new_zip)).json()
+                if t['cod'] == 200:
+                    if t['name'] != zip_weather.city:
+
+                        zipcodeForm.save()
+                else:
+                    error_messages = "This zipcode can't be pinpointed"
+            else:
+                error_messages = "Zipcode already exists"
+   
+   
+
+    context ={
+        "zipForm":zipcodeForm,
+        "zipcode_weather":zipcode_data,
+        "err_messages":error_messages
+
+    }
+
+    return render(request, "zipcode.html", context)

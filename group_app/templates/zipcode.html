@@ -30,18 +30,18 @@
                     <form method="POST">
                       {%csrf_token%}
                         <div class="field has-addons">
-                            <div class="control is-expanded">
-                                {{form.city}}
-                            </div>
-                            <div class="control">
-                                  <button class="btn btn-outline-primary btn-md">Add City</button>
-                            </div>
-                        </div>
-                        {%if message%}
-                          <div class="notification {{message_class}}" >{{message}}</div>
-                        {%endif%}
+                          <div class="control is-expanded">
+                              {{zipForm.zipcode}}
+                          </div>
+                          <div class="control">
+                                <button class="btn btn-outline-info btn-md">Search by ZipCode</button>
+                          </div>
+                          
+                      </div>
+                      {%if err_messages%}
+                        <div class="notification {{message_class}}" >{{err_messages}}</div>
+                      {%endif%}
                     </form>
-                    <a href="/zipcode">Search by Zipcode</a>
                 </div>
             </div>
         </div>
@@ -50,23 +50,21 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-offset-4 is-4">
-                  {%for city_weather in city_weather%}
-                  {%for cities in current_user_city%}
-                  {%if city_weather.city == cities.city%}
+                  {%for zip in zipcode_weather %}
                     <div class="box">
                         <article class="media">
                             <div class="media-left">
                                 <figure class="image is-50x50">
-                                    <img src="http://openweathermap.org/img/w/{{city_weather.icon}}.png" alt="Image">
+                                    <img src="http://openweathermap.org/img/w/{{zip.icon}}.png" alt="Image">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <span class="title">{{city_weather.city}}</span>
+                                        <span class="title">{{zip.city}}</span>
                                         <br>
-                                        <span class="subtitle">{{city_weather.temperature}}°F </span>
-                                        <br> {{city_weather.description}}
+                                        <span class="subtitle">{{zip.temperature}}°F </span>
+                                        <br> {{zip.description}}
                                     </p>
                                 </div>
                             </div>
@@ -75,8 +73,6 @@
                             </div>
                         </article>
                     </div>
-                  {%endif%}
-                  {%endfor%}
                   {%endfor%}
                     
                 </div>
