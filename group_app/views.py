@@ -165,7 +165,7 @@ def zipcode(request):
                 t = requests.get(url2.format(new_zip)).json()
                 if t['cod'] == 200:
                     if t['name'] != zip_weather.city:
-
+                        
                         zipcodeForm.save()
                 else:
                     error_messages = "This zipcode can't be pinpointed"

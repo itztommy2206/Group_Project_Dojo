@@ -1,3 +1,75 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+#bg {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  /* background: url('{% static "background_search_desktop.jpg" %}') no-repeat
+      center center fixed;
+  
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover; */
+
+  /* background-image: url('{% static "image/background_search_desktop.jpg" %}');
+    background-repeat: no-repeat;
+    min-height: 500px; */
+
+  background-image: url('{% static "img/weatherBG.png" %}');
+
+  /* "{{ url_for('static', filename=commPageData.background_image) }}" */
+}
+
+#container {
+  width: 1400px;
+  margin: 0 auto;
+  padding-left: 30px;
+  padding-bottom: 40px;
+  /* text-align: center; */
+}
+
+.section {
+  width: 450px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.section input {
+  width: 200px;
+}
+
+img {
+  /* width: 50px;
+  border: 1px solid; */
+  border-radius: 50%;
+}
+
+.errors {
+  color: red;
+  margin-left: 300px;
+}
+
+.h1_style {
+  color: rgb(190, 158, 158);
+  text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff,
+    1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  /* font-style: oblique; */
+}
+
+button {
+  /* background-color: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 5px; */
+  margin-top: 25px;
+}
+
 /* * {
     font-family: 'Copperplate', fantasy;
 
