@@ -5,6 +5,8 @@ import bcrypt
 import requests
 from .forms import CityForm
 
+# from .forms import UserUpdateForm, ProfileUpdateForm
+
 ## Register & Login
 def index(request):
     return render(request, 'index.html')
@@ -120,3 +122,22 @@ def delete_city(request, city_name):
 def logout(request):
     request.session.flush()
     return redirect('/')
+
+def profile(request):
+    if 'user_id' not in request.session:
+        return redirect('/')
+        errors = User.objects.reg_validator(request.POST)
+        if errors:
+            for value in errors.values():
+                messages.error(request, value)
+            return redirect('/')
+            user = User.objects.create(
+            first_name = request.POST['first_name'],
+            last_name = request.POST['last_name'],
+            email = request.POST['email'],
+        )
+        request.session['user_id'] = user.id
+        return redirect('/weather')
+
+    return render(request, 'profile.html')
+

@@ -14,8 +14,9 @@
     <div class="jumbotron text-center" style="margin-bottom:0">
       <h1>The Weather App</h1>
       <h2>Welcome {{current_user.first_name}} {{current_user.last_name}}</h2>
-      <!-- <img src="{{ current_user.profile.image.url }}"> -->
+      <!-- <img src="{{ current_user.profile_image.url }}"> -->
       <img src="{% static 'img/johnDoe.png' %}" class="rounded-circle" alt="Avatar" style="width:50px">
+      <a class="nav-link" href="/profile">Profile</a>
       <a class="nav-link" href="/logout">Log Out</a>
     </div>
 
@@ -56,7 +57,7 @@
           <div class="columns">
               <div class="column is-offset-4 is-4">
                 
-               
+            
                 {%for city_weather in city_weather%}
                 {%for cities in current_user_city%}
                 {%if city_weather.city == cities.city%}

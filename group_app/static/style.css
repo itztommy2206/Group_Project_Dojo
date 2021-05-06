@@ -3,6 +3,8 @@
   padding: 0px;
 }
 
+body{margin-top:15px;}
+
 #bg {
   background-repeat: no-repeat;
   background-size: cover;
